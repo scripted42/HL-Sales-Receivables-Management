@@ -4,37 +4,94 @@
     <meta charset="utf-8">
     <title>Bon {{ $transaction->nomor_bon }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #333;
-            font-size: 13px;
-            line-height: 1.4;
+            font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #1d273b;
+            font-size: 12px;
+            line-height: 1.5;
             margin: 0;
             padding: 0;
+            background-color: #ffffff;
         }
-        .header {
-            margin-bottom: 25px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 15px;
+        .invoice-card {
+            padding: 10px;
+            border-top: 5px solid #206bc4;
         }
-        .title {
+        .header-table {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .header-table td {
+            vertical-align: top;
+        }
+        .brand-title {
             font-size: 20px;
-            font-weight: bold;
-            color: #1a1a1a;
+            font-weight: 700;
+            color: #206bc4;
+            letter-spacing: -0.02em;
             margin: 0;
         }
-        .meta-table {
-            width: 100%;
-            margin-bottom: 25px;
+        .brand-subtitle {
+            font-size: 10px;
+            color: #626976;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 3px;
         }
-        .meta-table td {
+        .invoice-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1d273b;
+            text-align: right;
+            margin: 0;
+        }
+        .invoice-number {
+            font-size: 12px;
+            font-family: monospace;
+            color: #626976;
+            text-align: right;
+            margin-top: 5px;
+        }
+        .split-table {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .split-table td {
             vertical-align: top;
-            padding: 2px 0;
+            width: 50%;
+        }
+        .section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #626976;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .info-value {
+            font-size: 12px;
+            color: #1d273b;
+            line-height: 1.6;
+        }
+        .info-value strong {
+            color: #1c2434;
+            font-weight: 600;
+        }
+        .meta-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .meta-list li {
+            margin-bottom: 4px;
+            font-size: 12px;
         }
         .meta-label {
-            font-weight: bold;
-            color: #555;
-            width: 120px;
+            color: #626976;
+            display: inline-block;
+            width: 110px;
         }
         .items-table {
             width: 100%;
@@ -42,18 +99,21 @@
             margin-bottom: 30px;
         }
         .items-table th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            font-weight: bold;
-            padding: 10px;
+            background-color: #f6f8fb;
+            border-bottom: 2px solid #e6e8eb;
+            border-top: 1px solid #e6e8eb;
+            font-weight: 600;
+            padding: 10px 12px;
             text-align: left;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
-            color: #495057;
+            color: #626976;
+            letter-spacing: 0.05em;
         }
         .items-table td {
-            padding: 10px;
-            border-bottom: 1px solid #dee2e6;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e6e8eb;
+            color: #1d273b;
         }
         .text-right {
             text-align: right;
@@ -61,40 +121,14 @@
         .text-center {
             text-align: center;
         }
-        .summary-container {
-            width: 300px;
-            float: right;
-            margin-top: 15px;
-        }
-        .summary-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .summary-table td {
-            padding: 6px 10px;
-        }
-        .summary-label {
-            color: #666;
-        }
-        .summary-value {
-            font-weight: bold;
-            text-align: right;
-        }
-        .total-row td {
-            border-top: 2px solid #ddd;
-            font-size: 15px;
-            padding-top: 10px;
-        }
-        .total-value {
-            color: #4f46e5;
-        }
         .badge {
             display: inline-block;
             padding: 3px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 4px;
             text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
         .badge-lunas {
             background-color: #d1fae5;
@@ -104,124 +138,146 @@
             background-color: #fee2e2;
             color: #991b1b;
         }
+        .summary-container {
+            width: 320px;
+            float: right;
+            margin-top: 10px;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .summary-table td {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .summary-label {
+            color: #626976;
+        }
+        .summary-value {
+            font-weight: 600;
+            text-align: right;
+            color: #1d273b;
+        }
+        .total-row td {
+            border-top: 2px solid #e6e8eb;
+            font-size: 14px;
+            padding-top: 10px;
+            font-weight: 700;
+        }
+        .total-value {
+            color: #206bc4;
+            font-size: 16px;
+        }
         .footer {
-            margin-top: 50px;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
+            margin-top: 60px;
+            border-top: 1px solid #e6e8eb;
+            padding-top: 20px;
             text-align: center;
-            color: #888;
-            font-size: 11px;
+            color: #626976;
+            font-size: 10px;
             clear: both;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <table style="width: 100%">
+    <div class="invoice-card">
+        <!-- Top Invoice Header -->
+        <table class="header-table">
             <tr>
                 <td>
-                    <div class="title">HL SALES & RECEIVABLES</div>
-                    <div style="color: #666; font-size: 11px; margin-top: 3px;">Faktur Penjualan (Bon) Resmi</div>
+                    <h1 class="brand-title">HL SALES & RECEIVABLES</h1>
+                    <div class="brand-subtitle">Faktur Penjualan Resmi</div>
                 </td>
-                <td class="text-right">
-                    @if ($transaction->status === 'Lunas')
-                        <span class="badge badge-lunas">LUNAS</span>
-                    @else
-                        <span class="badge badge-piutang">PIUTANG</span>
-                    @endif
+                <td>
+                    <div class="invoice-title">FAKTUR (BON)</div>
+                    <div class="invoice-number">No. {{ $transaction->nomor_bon }}</div>
                 </td>
             </tr>
         </table>
-    </div>
 
-    <table class="meta-table">
-        <tr>
-            <td style="width: 50%">
-                <table>
-                    <tr>
-                        <td class="meta-label">Nomor Bon</td>
-                        <td>: <strong>{{ $transaction->nomor_bon }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="meta-label">Tanggal</td>
-                        <td>: {{ $transaction->tanggal->format('d M Y') }}</td>
-                    </tr>
-                    @if($transaction->status === 'Lunas' && $transaction->tanggal_pelunasan)
-                    <tr>
-                        <td class="meta-label">Tgl Pelunasan</td>
-                        <td>: {{ $transaction->tanggal_pelunasan->format('d M Y') }}</td>
-                    </tr>
-                    @endif
-                </table>
-            </td>
-            <td style="width: 50%">
-                <table>
-                    <tr>
-                        <td class="meta-label">Pelanggan</td>
-                        <td>: <strong>{{ $transaction->customer->name }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="meta-label">Jenis Transaksi</td>
-                        <td>: {{ $transaction->is_bonus ? 'Transaksi Bonus (Free Items)' : 'Penjualan Reguler' }}</td>
-                    </tr>
-                    @if($transaction->deskripsi)
-                    <tr>
-                        <td class="meta-label">Catatan</td>
-                        <td>: {{ $transaction->deskripsi }}</td>
-                    </tr>
-                    @endif
-                </table>
-            </td>
-        </tr>
-    </table>
-
-    <table class="items-table">
-        <thead>
+        <!-- Details split: Client and Metadata -->
+        <table class="split-table">
             <tr>
-                <th style="width: 5%">No</th>
-                <th style="width: 45%">Nama Produk</th>
-                <th style="width: 10%" class="text-center">Tipe</th>
-                <th style="width: 10%" class="text-center">Qty</th>
-                <th style="width: 15%" class="text-right">Harga Diskon/Unit</th>
-                <th style="width: 15%" class="text-right">Subtotal Omzet</th>
+                <td>
+                    <div class="section-title">Pelanggan (Penerima)</div>
+                    <div class="info-value">
+                        <strong>{{ $transaction->customer->name }}</strong><br>
+                        Mitra Usaha HL<br>
+                        Tipe: {{ $transaction->is_bonus ? 'Transaksi Bonus (Free Items)' : 'Penjualan Reguler' }}
+                    </div>
+                </td>
+                <td>
+                    <div class="section-title">Rincian Faktur</div>
+                    <ul class="meta-list">
+                        <li><span class="meta-label">Tanggal Terbit:</span> {{ $transaction->tanggal->format('d M Y') }}</li>
+                        @if($transaction->status === 'Lunas' && $transaction->tanggal_pelunasan)
+                            <li><span class="meta-label">Tgl Pelunasan:</span> {{ $transaction->tanggal_pelunasan->format('d M Y') }}</li>
+                        @endif
+                        <li>
+                            <span class="meta-label">Status Bayar:</span>
+                            @if ($transaction->status === 'Lunas')
+                                <span class="badge badge-lunas">LUNAS</span>
+                            @else
+                                <span class="badge badge-piutang">PIUTANG</span>
+                            @endif
+                        </li>
+                    </ul>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($transaction->items as $idx => $item)
+        </table>
+
+        <!-- Itemized List Table -->
+        <table class="items-table">
+            <thead>
                 <tr>
-                    <td class="text-center">{{ $idx + 1 }}</td>
-                    <td>{{ $item->product_name }}</td>
-                    <td class="text-center"><span style="font-weight: 500;">{{ $item->product_type }}</span></td>
-                    <td class="text-center">{{ $item->quantity }}</td>
-                    <td class="text-right">Rp {{ number_format($item->discounted_unit_price, 2, ',', '.') }}</td>
-                    <td class="text-right">Rp {{ number_format($item->line_omzet, 2, ',', '.') }}</td>
+                    <th style="width: 5%;" class="text-center">No</th>
+                    <th style="width: 45%;">Nama Produk</th>
+                    <th style="width: 10%;" class="text-center">Tipe</th>
+                    <th style="width: 10%;" class="text-center">Qty</th>
+                    <th style="width: 15%;" class="text-right">Harga Diskon</th>
+                    <th style="width: 15%;" class="text-right">Subtotal Omzet</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <div class="summary-container">
-        <table class="summary-table">
-            <tr>
-                <td class="summary-label">Total Omzet</td>
-                <td class="summary-value">Rp {{ number_format($transaction->omzet, 2, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <td class="summary-label">Ongkos Kirim</td>
-                <td class="summary-value">Rp {{ number_format($transaction->ongkir, 2, ',', '.') }}</td>
-            </tr>
-            <tr class="total-row">
-                <td class="summary-label" style="font-weight: bold;">
-                    {{ $transaction->is_bonus ? 'Total Biaya' : 'Total Piutang' }}
-                </td>
-                <td class="summary-value total-value">Rp {{ number_format($transaction->total_owed, 2, ',', '.') }}</td>
-            </tr>
+            </thead>
+            <tbody>
+                @foreach($transaction->items as $idx => $item)
+                    <tr>
+                        <td class="text-center">{{ $idx + 1 }}</td>
+                        <td style="font-weight: 500;">{{ $item->product_name }}</td>
+                        <td class="text-center">{{ $item->product_type }}</td>
+                        <td class="text-center">{{ $item->quantity }}</td>
+                        <td class="text-right">Rp {{ number_format($item->discounted_unit_price, 2, ',', '.') }}</td>
+                        <td class="text-right" style="font-weight: 600;">Rp {{ number_format($item->line_omzet, 2, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
-    </div>
 
-    <div class="footer">
-        Terima Kasih atas Kemitraan Anda dengan HL.<br>
-        Dokumen ini dibuat otomatis secara sah tanpa tanda tangan fisik.
+        <!-- Totals summary block -->
+        <div class="summary-container">
+            <table class="summary-table">
+                <tr>
+                    <td class="summary-label">Total Omzet</td>
+                    <td class="summary-value">Rp {{ number_format($transaction->omzet, 2, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td class="summary-label">Ongkos Kirim</td>
+                    <td class="summary-value">Rp {{ number_format($transaction->ongkir, 2, ',', '.') }}</td>
+                </tr>
+                <tr class="total-row">
+                    <td class="summary-label">
+                        {{ $transaction->is_bonus ? 'Total Biaya' : 'Total Tagihan (Piutang)' }}
+                    </td>
+                    <td class="summary-value total-value">Rp {{ number_format($transaction->total_owed, 2, ',', '.') }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Invoice footer -->
+        <div class="footer">
+            Terima kasih atas kemitraan dan kepercayaan Anda bersama HL.<br>
+            Dokumen ini sah dikeluarkan oleh sistem HL Sales & Receivables Management tanpa tanda tangan fisik.
+        </div>
     </div>
 </body>
 </html>

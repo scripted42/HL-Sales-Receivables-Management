@@ -6,6 +6,141 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* ==========================================================================
+   Tabler.io Style Overrides for Filament v3
+   ========================================================================== */
+
+/* Tables styling */
+.fi-ta-table {
+    border-collapse: collapse !important;
+}
+
+.fi-ta-header-cell {
+    background-color: #f6f8fb !important;
+    text-transform: uppercase !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    color: #626976 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 2px solid #e6e8eb !important;
+}
+
+.dark .fi-ta-header-cell {
+    background-color: #0b111c !important;
+    border-bottom: 2px solid #232d3d !important;
+    color: #8c939d !important;
+}
+
+.fi-ta-row {
+    border-bottom: 1px solid #f1f3f5 !important;
+    transition: background-color 0.2s ease;
+}
+
+.dark .fi-ta-row {
+    border-bottom: 1px solid #232d3d !important;
+}
+
+.fi-ta-row:hover {
+    background-color: #fcfdfe !important;
+}
+
+.dark .fi-ta-row:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Pagination overrides */
+.fi-ta-pagination {
+    border-top: 1px solid #e6e8eb !important;
+    padding: 12px 24px !important;
+    background-color: #f6f8fb !important;
+}
+
+.dark .fi-ta-pagination {
+    background-color: #0d131e !important;
+    border-top: 1px solid #232d3d !important;
+}
+
+/* Forms styling */
+.fi-fo-text-input input, 
+.fi-fo-select select, 
+.fi-fo-date-picker button {
+    border-radius: 6px !important;
+    border-color: #d8dbdf !important;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.02) !important;
+}
+
+.dark .fi-fo-text-input input, 
+.dark .fi-fo-select select, 
+.dark .fi-fo-date-picker button {
+    border-color: #2f3847 !important;
+}
+
+.fi-fo-text-input input:focus, 
+.fi-fo-select select:focus {
+    border-color: #206bc4 !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25) !important;
+}
+
+/* Card sections styling */
+.fi-section {
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.04), 0 1px 2px 0 rgba(0,0,0,0.02) !important;
+    border: 1px solid #e6e8eb !important;
+    background-color: #ffffff !important;
+}
+
+.dark .fi-section {
+    border-color: #232d3d !important;
+    background-color: #121824 !important;
+}
+
+/* Top Navbar styling */
+.fi-topbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e6e8eb !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+}
+
+.dark .fi-topbar {
+    background-color: #0e131f !important;
+    border-bottom: 1px solid #232d3d !important;
+}
+
+/* Tabler style welcome card and dashboard layout widgets */
+.tabler-welcome-card {
+    background: linear-gradient(135deg, #206bc4 0%, #1a569d 100%) !important;
+    border: none !important;
+}
+
+.tabler-welcome-card * {
+    color: #ffffff !important;
+}
+
+.tabler-stats-card {
+    background-color: #ffffff;
+    border: 1px solid #e6e8eb;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.04);
+}
+
+.dark .tabler-stats-card {
+    background-color: #121824;
+    border-color: #232d3d;
+}
+
+.tabler-trend-up {
+    color: #2fb344 !important;
+    font-weight: 600;
+}
+
+.tabler-trend-down {
+    color: #d63939 !important;
+    font-weight: 600;
 }
