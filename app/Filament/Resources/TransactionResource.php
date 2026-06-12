@@ -42,22 +42,53 @@ class TransactionResource extends Resource
     {
         return $form
             ->schema([
+                // ── PANDUAN LANGKAH DEMI LANGKAH ───────────────────────────────────
+                Forms\Components\Placeholder::make('panduan_pengisian')
+                    ->label('')
+                    ->columnSpanFull()
+                    ->content(new HtmlString("
+                        <div style='background:linear-gradient(135deg,#eff6ff 0%,#f0fdf4 100%);border:1px solid #bfdbfe;border-radius:14px;padding:18px 22px;margin-bottom:8px;'>
+                            <div style='font-size:1rem;font-weight:700;color:#1e40af;margin-bottom:12px;display:flex;align-items:center;gap:8px;'>
+                                <svg style='width:20px;height:20px;flex-shrink:0' fill='currentColor' viewBox='0 0 24 24'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/></svg>
+                                Panduan Mengisi Form Transaksi Bon
+                            </div>
+                            <div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;'>
+                                <div style='background:white;border-radius:10px;padding:10px 14px;border:1px solid #dbeafe;display:flex;align-items:center;gap:10px;'>
+                                    <span style='font-size:1.6rem;'>①</span>
+                                    <div><div style='font-weight:700;color:#1e40af;font-size:0.85rem;'>Informasi Bon</div><div style='color:#64748b;font-size:0.75rem;'>Isi nomor bon &amp; pilih pelanggan</div></div>
+                                </div>
+                                <div style='background:white;border-radius:10px;padding:10px 14px;border:1px solid #d1fae5;display:flex;align-items:center;gap:10px;'>
+                                    <span style='font-size:1.6rem;'>②</span>
+                                    <div><div style='font-weight:700;color:#065f46;font-size:0.85rem;'>Daftar Produk</div><div style='color:#64748b;font-size:0.75rem;'>Tambah produk &amp; jumlah barang</div></div>
+                                </div>
+                                <div style='background:white;border-radius:10px;padding:10px 14px;border:1px solid #e0e7ff;display:flex;align-items:center;gap:10px;'>
+                                    <span style='font-size:1.6rem;'>③</span>
+                                    <div><div style='font-weight:700;color:#4338ca;font-size:0.85rem;'>Cek Total &amp; Simpan</div><div style='color:#64748b;font-size:0.75rem;'>Periksa total lalu klik Simpan</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    ")),
+
                 Forms\Components\Grid::make(3)
                     ->schema([
                         // Left block: General Information
                         Forms\Components\Grid::make(1)
                             ->schema([
-                                Forms\Components\Section::make('General Information')
+                                Forms\Components\Section::make('Informasi Umum Transaksi')
+                                    ->icon('heroicon-o-clipboard-document-list')
                                     ->schema([
                                         TextInput::make('nomor_bon')
-                                            ->label('Nomor Bon')
+                                            ->label('Nomor Bon / Faktur')
+                                            ->helperText('Nomor unik untuk melacak bon ini.')
                                             ->required()
                                             ->unique(ignoreRecord: true)
                                             ->default(fn () => 'BON-' . date('Ymd-His'))
-                                            ->placeholder('e.g. BON-0001'),
+                                            ->placeholder('Contoh: BON-20231027-001'),
 
                                         Select::make('customer_id')
+                                            ->label('Pilih Pelanggan')
                                             ->relationship('customer', 'name')
+                                            ->helperText('Pelanggan menentukan skema diskon yang berlaku.')
                                             ->searchable()
                                             ->preload()
                                             ->required()
@@ -65,13 +96,16 @@ class TransactionResource extends Resource
                                             ->afterStateUpdated(fn (Get $get, Set $set) => self::updateAllLines($get, $set)),
 
                                         DatePicker::make('tanggal')
+                                            ->label('Tanggal Transaksi')
+                                            ->helperText('Tanggal saat bon ini diterbitkan.')
                                             ->default(now())
                                             ->required(),
 
                                         Select::make('status')
+                                            ->label('Status Pembayaran')
                                             ->options([
-                                                'Piutang' => 'Piutang (Outstanding)',
-                                                'Lunas' => 'Lunas (Settled)',
+                                                'Piutang' => 'Piutang (Belum Lunas)',
+                                                'Lunas' => 'Lunas (Sudah Dibayar)',
                                             ])
                                             ->default('Piutang')
                                             ->required()
@@ -87,6 +121,7 @@ class TransactionResource extends Resource
 
                                         DatePicker::make('tanggal_pelunasan')
                                             ->label('Tanggal Pelunasan')
+                                            ->helperText('Kapan tagihan ini dibayar penuh oleh pelanggan.')
                                             ->visible(fn (Get $get) => $get('status') === 'Lunas')
                                             ->required(fn (Get $get) => $get('status') === 'Lunas')
                                             ->default(now()),
@@ -96,16 +131,19 @@ class TransactionResource extends Resource
                         // Middle/Right block: Items & Totals
                         Forms\Components\Grid::make(1)
                             ->schema([
-                                Forms\Components\Section::make('Bonus & Shipping Parameters')
+                                Forms\Components\Section::make('Pengaturan Bonus & Pengiriman')
+                                    ->icon('heroicon-o-truck')
                                     ->schema([
                                         Toggle::make('is_bonus')
-                                            ->label('Transaksi Bonus (Free Items)')
+                                            ->label('Transaksi Bonus (Produk Gratis)')
+                                            ->helperText('Aktifkan jika produk ini dikategorikan sebagai bonus/free items.')
                                             ->default(false)
                                             ->live()
                                             ->afterStateUpdated(fn (Get $get, Set $set) => self::updateAllLines($get, $set)),
 
                                         TextInput::make('bonuses_claimed')
-                                            ->label('Bonuses Claimed (Jumlah Diklaim)')
+                                            ->label('Jumlah Bonus Diklaim')
+                                            ->helperText('Masukkan total kuota bonus yang ditukar oleh pelanggan.')
                                             ->numeric()
                                             ->default(0)
                                             ->minValue(0)
@@ -113,7 +151,8 @@ class TransactionResource extends Resource
                                             ->required(fn (Get $get) => (bool) $get('is_bonus')),
 
                                         TextInput::make('ongkir')
-                                            ->label('Ongkos Kirim (Shipping)')
+                                            ->label('Biaya Pengiriman (Ongkir)')
+                                            ->helperText('Masukkan biaya kirim tambahan jika ada.')
                                             ->numeric()
                                             ->prefix('Rp')
                                             ->default(0)
@@ -123,7 +162,7 @@ class TransactionResource extends Resource
 
                                 // Customer Bonus progress display on select
                                 Placeholder::make('customer_bonus_progress')
-                                    ->label('Bonus Eligibility / Progress')
+                                    ->label('Status Progres Bonus Pelanggan')
                                     ->visible(fn (Get $get) => filled($get('customer_id')))
                                     ->content(function (Get $get) {
                                         $customerId = $get('customer_id');
@@ -136,26 +175,31 @@ class TransactionResource extends Resource
                                         $carryOver = $stats['carry_over_omzet'];
                                         $threshold = $stats['threshold'];
                                         
-                                        $badgeColor = $available > 0 
-                                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' 
-                                            : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300';
-                                        
+                                        $badgeStyle = $available > 0
+                                            ? 'background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;padding:5px 14px;border-radius:20px;font-weight:700;font-size:0.85rem;'
+                                            : 'background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:5px 14px;border-radius:20px;font-weight:700;font-size:0.85rem;';
+
+                                        $statusText = $available > 0
+                                            ? "✅ {$available} Bonus Tersedia — Pelanggan berhak barang gratis!"
+                                            : "❌ Belum Ada Bonus — Target omzet belum tercapai.";
+
+                                        $barColor = $available > 0 ? '#10b981' : '#6366f1';
+
                                         return new HtmlString("
-                                            <div class='p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-3'>
-                                                <div class='flex justify-between items-center'>
-                                                    <span class='text-sm text-slate-500'>Bonus Tersedia (Available):</span>
-                                                    <span class='px-2.5 py-0.5 text-xs font-bold rounded-full {$badgeColor}'>
-                                                        {$available} Bonus
-                                                    </span>
+                                            <div style='background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;'>
+                                                <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;'>
+                                                    <span style='font-size:0.9rem;font-weight:700;color:#334155;'>Status Bonus Pelanggan:</span>
+                                                    <span style='{$badgeStyle}'>{$statusText}</span>
                                                 </div>
-                                                <div class='space-y-1.5'>
-                                                    <div class='flex justify-between text-xs text-slate-400'>
-                                                    <span>Progress ke Bonus Eligibility Berikutnya:</span>
-                                                        <span>Rp " . number_format($carryOver, 0, ',', '.') . " / Rp " . number_format($threshold, 0, ',', '.') . "</span>
+                                                <div>
+                                                    <div style='display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:6px;'>
+                                                        <span>Progress ke bonus berikutnya:</span>
+                                                        <span style='font-weight:600;'>Rp " . number_format($carryOver, 0, ',', '.') . " / Rp " . number_format($threshold, 0, ',', '.') . "</span>
                                                     </div>
-                                                    <div class='w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden'>
-                                                        <div class='bg-indigo-600 h-2.5 rounded-full transition-all duration-500' style='width: {$progress}%'></div>
+                                                    <div style='width:100%;background:#e2e8f0;border-radius:999px;height:14px;overflow:hidden;'>
+                                                        <div style='background:{$barColor};height:14px;border-radius:999px;width:{$progress}%;transition:width 0.5s ease;'></div>
                                                     </div>
+                                                    <div style='font-size:0.75rem;color:#94a3b8;margin-top:4px;'>{$progress}% dari Bonus Eligibility Threshold</div>
                                                 </div>
                                             </div>
                                         ");
@@ -163,14 +207,15 @@ class TransactionResource extends Resource
                             ])->columnSpan(2),
                     ]),
 
-                Forms\Components\Section::make('Transaction Items')
-                    ->description('Add products to the invoice. Prices are automatically computed with cascading customer discounts.')
+                Forms\Components\Section::make('Daftar Item Transaksi')
+                    ->description('Masukkan produk yang dibeli. Harga akan otomatis disesuaikan dengan diskon pelanggan.')
+                    ->icon('heroicon-o-shopping-cart')
                     ->schema([
                         Repeater::make('items')
                             ->relationship('items')
                             ->schema([
                                 Select::make('product_id')
-                                    ->label('Product')
+                                    ->label('Produk')
                                     ->relationship('product', 'name')
                                     ->searchable()
                                     ->preload()
@@ -182,6 +227,7 @@ class TransactionResource extends Resource
                                     }),
 
                                 TextInput::make('quantity')
+                                    ->label('Jumlah')
                                     ->numeric()
                                     ->default(1)
                                     ->required()
@@ -192,24 +238,30 @@ class TransactionResource extends Resource
                                         self::updateLineTotals($get, $set, "items.{$parts[1]}");
                                     }),
 
-                                // Readonly / Computed Fields
+                                // Readonly / Computed Fields (auto-filled, read-only)
                                 TextInput::make('harga_base')
-                                    ->label('Harga Base')
+                                    ->label('🏷️ Harga Dasar')
+                                    ->helperText('Otomatis — harga sebelum diskon')
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->readOnly(),
+                                    ->readOnly()
+                                    ->extraInputAttributes(['style' => 'background:#f0fdf4;color:#166534;font-weight:600;cursor:not-allowed;']),
 
                                 TextInput::make('discounted_unit_price')
-                                    ->label('Harga Diskon')
+                                    ->label('💰 Harga Setelah Diskon')
+                                    ->helperText('Otomatis — harga per unit setelah diskon')
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->readOnly(),
+                                    ->readOnly()
+                                    ->extraInputAttributes(['style' => 'background:#eff6ff;color:#1e40af;font-weight:700;cursor:not-allowed;']),
 
                                 TextInput::make('line_omzet')
-                                    ->label('Omzet')
+                                    ->label('📊 Total Baris Ini')
+                                    ->helperText('Otomatis — harga × jumlah')
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->readOnly(),
+                                    ->readOnly()
+                                    ->extraInputAttributes(['style' => 'background:#fdf4ff;color:#6b21a8;font-weight:700;cursor:not-allowed;']),
 
                                 // Hidden snapshots which are saved to the database
                                 Forms\Components\Hidden::make('product_name'),
@@ -221,53 +273,86 @@ class TransactionResource extends Resource
                             ->columns(5)
                             ->default([])
                             ->reorderable(false)
-                            ->addActionLabel('Tambah Item')
+                            ->addActionLabel('Tambah Item Baru')
                             ->live()
                             ->afterStateUpdated(fn (Get $get, Set $set) => self::updateAllLines($get, $set)),
                     ]),
 
-                Forms\Components\Section::make('Summary')
+                Forms\Components\Section::make('③ Ringkasan Total Tagihan')
+                    ->description('Periksa total tagihan sebelum menyimpan. Pastikan jumlahnya sudah benar.')
+                    ->icon('heroicon-o-calculator')
                     ->schema([
                         Placeholder::make('totals_summary')
                             ->label('')
+                            ->columnSpanFull()
                             ->content(function (Get $get) {
-                                $items = $get('items') ?: [];
-                                $isBonus = (bool) $get('is_bonus');
-                                
+                                $items     = $get('items') ?: [];
+                                $isBonus   = (bool) $get('is_bonus');
+
                                 $totalOmzet = 0;
+                                $itemCount  = 0;
                                 foreach ($items as $item) {
                                     $totalOmzet += (float) ($item['line_omzet'] ?? 0);
+                                    if (!empty($item['product_id'])) $itemCount++;
                                 }
-                                
-                                $ongkir = (float) ($get('ongkir') ?? 0);
-                                $totalOwed = $totalOmzet + $ongkir;
-                                
+
+                                $ongkir    = (float) ($get('ongkir') ?? 0);
+                                $totalOwed  = $totalOmzet + $ongkir;
+
+                                $totalLabel = $isBonus ? '🎁 Total Biaya Bonus' : '💳 TOTAL YANG HARUS DIBAYAR';
+                                $totalColor = $isBonus ? '#059669' : '#4f46e5';
+                                $bgColor    = $isBonus
+                                    ? 'linear-gradient(135deg,#d1fae5,#ecfdf5)'
+                                    : 'linear-gradient(135deg,#eff6ff,#eef2ff)';
+                                $border     = $isBonus ? '#6ee7b7' : '#a5b4fc';
+
+                                $bonusNote = $isBonus
+                                    ? "<div style='background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:0.88rem;color:#92400e;'>
+                                           🎁 <strong>Ini Transaksi Bonus</strong> — Barang diberikan GRATIS kepada pelanggan. Total tagihan = Rp 0.
+                                       </div>"
+                                    : "";
+
                                 return new HtmlString("
-                                    <div class='p-5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl max-w-md ml-auto space-y-3 shadow-sm'>
-                                        <div class='flex justify-between text-sm text-slate-500'>
-                                            <span>Total Omzet:</span>
-                                            <span class='font-semibold text-slate-800 dark:text-slate-200'>Rp " . number_format($totalOmzet, 2, ',', '.') . "</span>
+                                    <div style='max-width:520px;margin-left:auto;'>
+                                        {$bonusNote}
+                                        <div style='background:{$bgColor};border:2px solid {$border};border-radius:16px;padding:22px 26px;box-shadow:0 4px 16px rgba(0,0,0,0.07);'>
+                                            <div style='font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;'>📋 Rincian Tagihan</div>
+                                            <div style='display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,0,0,0.06);'>
+                                                <span style='color:#475569;font-size:0.95rem;'>Jumlah produk</span>
+                                                <span style='font-weight:600;color:#1e293b;'>{$itemCount} item</span>
+                                            </div>
+                                            <div style='display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,0,0,0.06);'>
+                                                <span style='color:#475569;font-size:0.95rem;'>Subtotal Omzet</span>
+                                                <span style='font-weight:600;color:#1e293b;font-size:0.95rem;'>Rp " . number_format($totalOmzet, 2, ',', '.') . "</span>
+                                            </div>
+                                            <div style='display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,0,0,0.06);'>
+                                                <span style='color:#475569;font-size:0.95rem;'>Ongkos Kirim</span>
+                                                <span style='font-weight:600;color:#1e293b;font-size:0.95rem;'>Rp " . number_format($ongkir, 2, ',', '.') . "</span>
+                                            </div>
+                                            <div style='display:flex;justify-content:space-between;align-items:center;padding:16px 0 0 0;margin-top:4px;'>
+                                                <span style='color:{$totalColor};font-size:1.05rem;font-weight:700;'>{$totalLabel}</span>
+                                                <span style='color:{$totalColor};font-size:1.7rem;font-weight:900;letter-spacing:-0.02em;'>Rp " . number_format($totalOwed, 2, ',', '.') . "</span>
+                                            </div>
                                         </div>
-                                        <div class='flex justify-between text-sm text-slate-500'>
-                                            <span>Ongkos Kirim (Ongkir):</span>
-                                            <span class='font-semibold text-slate-800 dark:text-slate-200'>Rp " . number_format($ongkir, 2, ',', '.') . "</span>
-                                        </div>
-                                        <hr class='border-slate-200 dark:border-slate-800'>
-                                        <div class='flex justify-between text-lg font-bold text-slate-800 dark:text-slate-100'>
-                                            <span>" . ($isBonus ? 'Total Biaya (Bonus)' : 'Total Piutang (Amount Owed)') . ":</span>
-                                            <span class='text-indigo-600 dark:text-indigo-400'>Rp " . number_format($totalOwed, 2, ',', '.') . "</span>
+                                        <div style='text-align:center;margin-top:10px;font-size:0.8rem;color:#94a3b8;'>
+                                            ✅ Pastikan total sudah benar sebelum klik tombol <strong>Simpan</strong>.
                                         </div>
                                     </div>
                                 ");
-                            })
+                            }),
                     ]),
 
-                Forms\Components\Section::make('Notes')
+                Forms\Components\Section::make('📝 Catatan Tambahan (Opsional)')
+                    ->description('Tuliskan catatan khusus untuk bon ini jika diperlukan, misalnya instruksi pengiriman atau keterangan lain. Boleh dikosongkan.')
+                    ->icon('heroicon-o-pencil-square')
+                    ->collapsible()
+                    ->collapsed()
                     ->schema([
                         Textarea::make('deskripsi')
-                            ->label('Deskripsi/Catatan')
-                            ->rows(3)
-                            ->placeholder('e.g. Catatan pengiriman atau instruksi khusus'),
+                            ->label('Catatan / Keterangan')
+                            ->helperText('Contoh: "Kirim ke gudang belakang", "Bayar minggu depan", dll.')
+                            ->rows(4)
+                            ->placeholder('Tulis catatan di sini jika ada...'),
                     ]),
             ]);
     }
