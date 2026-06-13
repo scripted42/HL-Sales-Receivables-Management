@@ -13,166 +13,96 @@
 }
 
 /* ==========================================================================
-   Tabler.io Style Overrides for Filament v3
+   Tabler.io Complete Theme Harmonization
    ========================================================================== */
 
-/* Tables styling */
-.fi-ta-table {
-    border-collapse: collapse !important;
+/* Page Background Reset */
+body, 
+.fi-layout, 
+.fi-main {
+    background-color: #f6f8fb !important;
 }
 
-.fi-ta-header-cell {
-    background-color: #f6f8fb !important;
-    text-transform: uppercase !important;
-    font-size: 0.72rem !important;
+/* Page Headers */
+.fi-header-heading {
+    font-size: 1.5rem !important;
     font-weight: 700 !important;
-    letter-spacing: 0.04em !important;
-    color: #626976 !important;
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-    border-bottom: 2px solid #e6e8eb !important;
+    letter-spacing: -0.02em !important;
+    color: #1d273b !important;
 }
 
-.dark .fi-ta-header-cell {
-    background-color: #0b111c !important;
-    border-bottom: 2px solid #232d3d !important;
-    color: #8c939d !important;
-}
-
-.fi-ta-row {
-    border-bottom: 1px solid #f1f3f5 !important;
-    transition: background-color 0.2s ease;
-}
-
-.dark .fi-ta-row {
-    border-bottom: 1px solid #232d3d !important;
-}
-
-.fi-ta-row:hover {
-    background-color: #fcfdfe !important;
-}
-
-.dark .fi-ta-row:hover {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-}
-
-/* Pagination overrides */
-.fi-ta-pagination {
-    border-top: 1px solid #e6e8eb !important;
-    padding: 12px 24px !important;
-    background-color: #f6f8fb !important;
-}
-
-.dark .fi-ta-pagination {
-    background-color: #0d131e !important;
-    border-top: 1px solid #232d3d !important;
-}
-
-/* Forms styling */
-.fi-fo-text-input input, 
-.fi-fo-select select, 
-.fi-fo-date-picker button {
-    border-radius: 6px !important;
-    border-color: #d8dbdf !important;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.02) !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .fi-fo-text-input input, 
-.dark .fi-fo-select select, 
-.dark .fi-fo-date-picker button {
-    border-color: #2f3847 !important;
-}
-
-.fi-fo-text-input input:focus, 
-.fi-fo-select select:focus {
-    border-color: #206bc4 !important;
-    box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25) !important;
-}
-
-/* Card sections styling */
-.fi-section {
-    border-radius: 8px !important;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.04), 0 1px 2px 0 rgba(0,0,0,0.02) !important;
-    border: 1px solid #e6e8eb !important;
-    background-color: #ffffff !important;
-}
-
-.dark .fi-section {
-    border-color: #232d3d !important;
-    background-color: #121824 !important;
-}
-
-/* Top Navbar styling */
+/* Top Navigation Bar */
 .fi-topbar {
     background-color: #ffffff !important;
     border-bottom: 1px solid #e6e8eb !important;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03) !important;
 }
 
-.dark .fi-topbar {
-    background-color: #0e131f !important;
-    border-bottom: 1px solid #232d3d !important;
+.fi-topbar-item-button {
+    border-radius: 0px !important;
+    border-bottom: 2px solid transparent !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+    transition: all 0.15s ease-in-out !important;
 }
 
-/* Tabler style welcome card and dashboard layout widgets */
-.tabler-welcome-card {
-    background: linear-gradient(135deg, #206bc4 0%, #1a569d 100%) !important;
-    border: none !important;
+.fi-topbar-item.fi-active .fi-topbar-item-button {
+    border-bottom-color: #206bc4 !important;
+    color: #206bc4 !important;
+    background-color: transparent !important;
 }
 
-.tabler-welcome-card * {
-    color: #ffffff !important;
+.fi-topbar-item-button:hover {
+    background-color: rgba(32, 107, 196, 0.03) !important;
+    color: #206bc4 !important;
 }
 
+.fi-topbar-item-label {
+    font-weight: 600 !important;
+}
+
+/* Card Sections & Containers */
+.fi-section, 
+.fi-card, 
+.fi-ta-ctn, 
+.premium-section-card {
+    border-radius: 4px !important;
+    border: 1px solid #e6e8eb !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Tabler style Status-Top Metric Cards */
 .premium-card {
-    background: #ffffff;
-    border: 1px solid rgba(226, 232, 240, 0.8) !important;
-    border-radius: 16px !important;
+    background: #ffffff !important;
+    border: 1px solid #e6e8eb !important;
+    border-radius: 4px !important;
     padding: 20px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01), inset 0 2px 4px 0 rgba(255, 255, 255, 0.5) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .premium-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 12px 20px -8px rgba(99, 102, 241, 0.15), 0 4px 12px -2px rgba(99, 102, 241, 0.05) !important;
-    border-color: rgba(99, 102, 241, 0.3) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 
-.card-piutang:hover {
-    box-shadow: 0 12px 20px -8px rgba(244, 63, 94, 0.15), 0 4px 12px -2px rgba(244, 63, 94, 0.05) !important;
-    border-color: rgba(244, 63, 94, 0.3) !important;
+.card-piutang {
+    border-top: 3px solid #d63939 !important;
 }
 
-.card-omzet:hover {
-    box-shadow: 0 12px 20px -8px rgba(99, 102, 241, 0.15), 0 4px 12px -2px rgba(99, 102, 241, 0.05) !important;
-    border-color: rgba(99, 102, 241, 0.3) !important;
+.card-omzet {
+    border-top: 3px solid #206bc4 !important;
 }
 
-.card-laba:hover {
-    box-shadow: 0 12px 20px -8px rgba(16, 185, 129, 0.15), 0 4px 12px -2px rgba(16, 185, 129, 0.05) !important;
-    border-color: rgba(16, 185, 129, 0.3) !important;
+.card-laba {
+    border-top: 3px solid #2fb344 !important;
 }
 
-.card-bonus:hover {
-    box-shadow: 0 12px 20px -8px rgba(245, 158, 11, 0.15), 0 4px 12px -2px rgba(245, 158, 11, 0.05) !important;
-    border-color: rgba(245, 158, 11, 0.3) !important;
-}
-
-.premium-section-card {
-    background: #ffffff !important;
-    border: 1px solid rgba(226, 232, 240, 0.8) !important;
-    border-radius: 16px !important;
-    padding: 24px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.005) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.premium-section-card:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.01) !important;
+.card-bonus {
+    border-top: 3px solid #f59f00 !important;
 }
 
 .sparkline-container {
@@ -184,43 +114,126 @@
     opacity: 1;
 }
 
+/* Decorative background glowing spots */
 .card-glow {
     position: absolute;
     width: 150px;
     height: 150px;
     border-radius: 50%;
     filter: blur(40px);
-    opacity: 0.03;
+    opacity: 0.02;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
 .premium-card:hover .card-glow {
-    opacity: 0.08;
+    opacity: 0.05;
 }
 
 .glow-piutang {
-    background: #f43f5e;
+    background: #d63939;
     top: -50px;
     right: -50px;
 }
 
 .glow-omzet {
-    background: #6366f1;
+    background: #206bc4;
     top: -50px;
     right: -50px;
 }
 
 .glow-laba {
-    background: #10b981;
+    background: #2fb344;
     top: -50px;
     right: -50px;
 }
 
 .glow-bonus {
-    background: #f59e0b;
+    background: #f59f00;
     top: -50px;
     right: -50px;
+}
+
+/* Tables styling */
+.fi-ta-table {
+    border-collapse: collapse !important;
+}
+
+.fi-ta-header-cell {
+    background-color: #fcfdfe !important;
+    text-transform: uppercase !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    color: #626976 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    border-top: 1px solid #e6e8eb !important;
+    border-bottom: 2px solid #e6e8eb !important;
+}
+
+.fi-ta-row {
+    border-bottom: 1px solid #f1f3f5 !important;
+    transition: background-color 0.15s ease !important;
+}
+
+.fi-ta-row:hover {
+    background-color: rgba(32, 107, 196, 0.015) !important;
+}
+
+/* Pagination overrides */
+.fi-ta-pagination {
+    border-top: 1px solid #e6e8eb !important;
+    padding: 12px 24px !important;
+    background-color: #fcfdfe !important;
+}
+
+/* Forms styling */
+.fi-fo-text-input input, 
+.fi-fo-select select, 
+.fi-fo-date-picker button,
+.fi-fo-textarea textarea {
+    border-radius: 4px !important;
+    border-color: #d9dbde !important;
+    background-color: #ffffff !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05) !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+.fi-fo-text-input input:focus, 
+.fi-fo-select select:focus,
+.fi-fo-textarea textarea:focus {
+    border-color: #80b4ec !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25) !important;
+}
+
+/* Buttons styling */
+.fi-btn {
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+.fi-btn-color-primary {
+    background-color: #206bc4 !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05) !important;
+}
+
+.fi-btn-color-primary:hover {
+    background-color: #1a569d !important;
+}
+
+.fi-btn-color-gray {
+    background-color: #ffffff !important;
+    border: 1px solid #d9dbde !important;
+    color: #495057 !important;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05) !important;
+}
+
+.fi-btn-color-gray:hover {
+    background-color: #f6f8fb !important;
+    color: #232e3c !important;
 }
 
 .tabler-trend-up {
@@ -231,6 +244,16 @@
 .tabler-trend-down {
     color: #d63939 !important;
     font-weight: 600;
+}
+
+/* Welcome Card inside stats overview */
+.tabler-welcome-card {
+    background: linear-gradient(135deg, #206bc4 0%, #1a569d 100%) !important;
+    border: none !important;
+}
+
+.tabler-welcome-card * {
+    color: #ffffff !important;
 }
 
 /* Filament custom theme icon size safety overrides */

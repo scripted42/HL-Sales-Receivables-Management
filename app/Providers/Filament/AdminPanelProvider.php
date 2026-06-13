@@ -34,12 +34,12 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/app.css')
             ->login(\App\Filament\Pages\Auth\CustomLogin::class)
             ->colors([
-                'primary' => Color::Indigo,
-                'gray' => Color::Slate,
-                'info' => Color::Blue,
-                'success' => Color::Emerald,
-                'warning' => Color::Orange,
-                'danger' => Color::Rose,
+                'primary' => '#206bc4', // Tabler Blue
+                'gray' => '#626976',    // Tabler Gray
+                'info' => '#4299e1',    // Tabler Azure
+                'success' => '#2fb344', // Tabler Green
+                'warning' => '#f59f00', // Tabler Yellow
+                'danger' => '#d63939',  // Tabler Red
             ])
             ->font('Outfit', url: 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap')
             ->brandName('HL Sales & Receivables')
