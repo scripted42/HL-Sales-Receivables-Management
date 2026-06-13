@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->topNavigation()
             ->darkMode(false)
             ->defaultThemeMode(\Filament\Enums\ThemeMode::Light)
+            ->viteTheme('resources/css/app.css')
             ->login(\App\Filament\Pages\Auth\CustomLogin::class)
             ->colors([
                 'primary' => Color::Indigo,
